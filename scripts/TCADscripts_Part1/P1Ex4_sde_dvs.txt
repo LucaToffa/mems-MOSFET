@@ -1,0 +1,42 @@
+;;
+;; Example 1.4: silicon slab
+;; Length: 1mm, thickness: 1um
+;;
+
+
+;; Define geometry
+(sdegeo:create-rectangle (position 0 0 0 )  (position 10 1 0 ) "Silicon" "left" )
+(sdegeo:create-rectangle (position 10 0 0 ) (position 1000 1 0 ) "Silicon" "right" )
+(sdegeo:insert-vertex (position 2 0 0 ))
+(sdegeo:insert-vertex (position 998 0 0 ))
+
+
+;; Defines contact names and placements
+
+(sdegeo:define-contact-set "C1" 4  (color:rgb 1 0 0 ) "##" )
+(sdegeo:set-current-contact-set "C1")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 1 0 0)))) "C1")
+
+(sdegeo:define-contact-set "C2" 4  (color:rgb 0 1 0 ) "##" )
+(sdegeo:set-current-contact-set "C2")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 999 0 0)))) "C2")
+
+
+;; Defines the doping profiles
+
+(sdedr:define-constant-profile "Substrate_prof_def" "BoronActiveConcentration" 1e14) 
+(sdedr:define-constant-profile-region "leftSubstrate_prof_plac" "Substrate_prof_def" "left")
+(sdedr:define-constant-profile-region "rightSubstrate_prof_plac" "Substrate_prof_def" "right")
+
+
+;; Defines the mesh discretization rules
+
+(sdedr:define-refeval-window "Global_ref_win" "Rectangle"  (position 0 0 0) (position 1000 1 0))
+(sdedr:define-refinement-size "Global_ref_def" 2 0.5 0 1 0.2 0 )
+(sdedr:define-refinement-placement "Global_ref_plac" "Global_ref_def" "Global_ref_win" )
+
+
+; saves the model file and the mesh file 
+
+(sde:save-model "p@node@")
+(sde:build-mesh "snmesh" "-a -c boxmethod" "n@node@")

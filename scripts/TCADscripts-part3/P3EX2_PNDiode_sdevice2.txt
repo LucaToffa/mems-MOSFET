@@ -1,0 +1,57 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 3.2: p-n junction: reverse bias 
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+	Digits=10
+        BreakCriteria{ Current(Contact="Ncontact" AbsVal=1e-12) }
+}
+
+
+Electrode {
+	{ Name="Ncontact" Voltage=0 resistor=1e6}
+	{ Name="Pcontact" Voltage=0 }
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) Avalanche)
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+	Quasistationary(
+        	   InitialStep=0.02	MinStep=1e-6 MaxStep=0.02
+           	Goal{ Name="Ncontact" Voltage=10 }
+	    Plot { Range = (0 1) Intervals =5}
+	) { Coupled { Poisson Electron Hole} }
+}
+
+

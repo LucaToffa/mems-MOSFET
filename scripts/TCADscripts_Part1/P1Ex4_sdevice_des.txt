@@ -1,0 +1,54 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 1.4: optical generation
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="C1" Voltage=0 }
+	{ Name="C2" Voltage=0 }
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ))
+
+}
+
+Physics (Region = "left") {
+        Optics (
+            OpticalGeneration (SetConstant (Value = 1e18))
+        )
+}		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	eLifetime hLifetime SRH
+	Doping 
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+
+}

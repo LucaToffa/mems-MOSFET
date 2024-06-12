@@ -1,0 +1,67 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 1.5: optical generation
+#  transient
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="C1" Voltage=0.1 }
+	{ Name="C2" Voltage=0 }
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+        Recombination(SRH( DopingDep ))
+
+        Optics (
+            OpticalGeneration (
+                SetConstant (Value = 1e18) 
+               	TimeDependence (
+               	    WaveTime = (10e-6, 50e-6)
+                		  WaveTSigma = 1e-9
+                )
+            )
+        )
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	eLifetime hLifetime SRH
+	OpticalGeneration
+	Doping 
+}
+
+
+Solve {
+	Load(FilePrefix="bias01V")
+        Transient(
+	    InitialTime=0.0
+	    FinalTime=100e-6
+	    InitialStep=0.2e-6
+	    MaxStep=0.2e-6
+	    MinStep=1e-9
+	    Increment=1.5
+	    Plot { Range = (0 100e-6) Intervals =10}
+	) { Coupled { Poisson Electron Hole} }
+}

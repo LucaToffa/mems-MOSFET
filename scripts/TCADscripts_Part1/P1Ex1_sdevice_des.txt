@@ -1,0 +1,50 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 1.1: semiconductor resistor
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="C1" Voltage=0}
+	{ Name="C2" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	Doping 
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+	Quasistationary(
+        		InitialStep=0.1	MinStep=1e-6 MaxStep=0.1
+           		Goal{ Name="C1" Voltage=1 }
+	) { Coupled { Poisson Electron Hole} }
+}

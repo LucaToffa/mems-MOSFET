@@ -1,0 +1,72 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 4.1: photodiode
+#  Current - Voltage curve with illumination
+#  Reverse bias
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+	Derivatives
+	Iterations=30
+	Digits = 6
+}
+
+
+Electrode {
+	{ Name="Ncontact" Voltage=0}
+	{ Name="Pcontact" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+	current = "@plot@" 
+	plot    = "@tdrdat@"
+}
+
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) Auger)
+  	Optics (
+		ComplexRefractiveIndex(WavelengthDep(Real Imag))
+		OpticalGeneration (
+			ComputeFromMonochromaticSource
+		)
+		Excitation (
+			Wavelength = @WL@  # um
+			Intensity = 10  # W/cm2 
+			Window (	Line (X1= 5  X2= 15) ) 
+			Theta = 0
+		) 
+		OpticalSolver ( TMM ( LayerStackExtraction() ) )
+	) 
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+	OpticalGeneration
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+	Quasistationary(
+		InitialStep=0.02	MinStep=1e-6 MaxStep=0.02
+		Goal{ Name="Ncontact" Voltage=10 }
+		Plot { Range = (0 1) Intervals =5}
+	) { Coupled { Poisson Electron Hole} }
+}
+
+

@@ -1,0 +1,53 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  p-n junction: forward bias
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="Ncontact" Voltage=0}
+	{ Name="Pcontact" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ))
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+	Quasistationary(
+        	   InitialStep=0.01	MinStep=1e-6 MaxStep=0.01
+           	Goal{ Name="Pcontact" Voltage=2 }
+	    Plot { Range = (0 1) Intervals =5}
+	) { Coupled { Poisson Electron Hole} }
+}

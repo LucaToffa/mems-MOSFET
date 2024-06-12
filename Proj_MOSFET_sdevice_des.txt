@@ -1,0 +1,130 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 5.1: MOSFET: drain voltage sweep
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="source" Voltage=0}
+	{ Name="drain" Voltage=0}
+	{ Name="gate" Voltage=0 Workfunction = 4.10}
+	{ Name="sub" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) )
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+Solve1 {
+	Poisson
+	Coupled {Poisson Electron Hole}
+	
+	# Ramp the gate and save structures
+	# First gate voltage
+	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
+		Goal {Name="gate" Voltage=2}
+		Plot { Range = (0 1) Intervals =2}
+	) {Coupled {Poisson Electron Hole}}
+	Save(FilePrefix="vg1")
+
+	# Second gate voltage
+	Quasistationary (InitialStep=0.1 Maxstep=0.1 MinStep=1e-5
+		Goal {Name="gate" Voltage=3})
+	{Coupled {Poisson Electron Hole}}
+	Save(FilePrefix="vg2")
+
+	# Load the saved structures and ramp the drain
+	# First curve
+	Load(FilePrefix="vg1")
+	NewCurrentPrefix="Curve1_"
+	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
+		Goal {Name="drain" Voltage=5})
+	{Coupled {Poisson Electron Hole}}
+
+	# Second curve
+	Load(FilePrefix="vg2")
+	NewCurrentPrefix="Curve2_"
+	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
+		Goal {Name="drain" Voltage=5})
+	{Coupled {Poisson Electron Hole}}
+
+    # from part 2
+    # Ramp the drain voltage
+	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
+		Goal {Name="drain" Voltage=5}
+	) {Coupled {Poisson Electron Hole}}
+
+
+	# Ramp the gate voltage
+	NewCurrentPrefix="GateSweep_"
+	Quasistationary (InitialStep=0.01 Maxstep=0.01 MinStep=1e-5
+		Goal {Name="gate" Voltage=5})
+	{Coupled {Poisson Electron Hole}}
+}
+
+
+Solve {
+    Poisson
+    Coupled {Poisson Electron Hole}
+    
+    # Transfer characteristic with VGS=1.2 and 3V
+    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5
+        Goal {Name="gate" Voltage=1.2}
+        Plot { Range = (0 1) Intervals =2}
+    ) {Coupled {Poisson Electron Hole}}
+    Save(FilePrefix="VGS1")
+
+    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5
+        Goal {Name="gate" Voltage=3}
+        Plot { Range = (0 1) Intervals =2}
+    ) {Coupled {Poisson Electron Hole}}
+    Save(FilePrefix="VGS3")
+
+    # VDS = 3.3 for both gate curves
+    # First curve
+	Load(FilePrefix="VGS1")
+	NewCurrentPrefix="CurveVGS1_"
+	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
+		Goal {Name="drain" Voltage=3.3})
+	{Coupled {Poisson Electron Hole}}
+
+	# Second curve
+	Load(FilePrefix="VGS3")
+	NewCurrentPrefix="CurveVGS3_"
+	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
+		Goal {Name="drain" Voltage=3.3})
+	{Coupled {Poisson Electron Hole}}
+
+
+    # Biasing the MOSFET with VD = VS = VB = 0, perform an AC simulation at 1MHz,
+    # sweeping the gate voltage between -3V and 3V to extract the gate capacitance.
+
+}

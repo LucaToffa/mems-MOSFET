@@ -1,0 +1,42 @@
+;;
+;; Silicon p-n junction
+;; n-substrate - p+ implantation
+;; 1D model
+;;
+
+
+;; Define geometry
+(sdegeo:create-rectangle (position 0 0 0 )  (position 10 10 0 ) "Silicon" "substrate" )
+
+;; Defines contact names and placements
+
+(sdegeo:define-contact-set "Pcontact" 4  (color:rgb 1 0 0 ) "##" )
+(sdegeo:set-current-contact-set "Pcontact")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 5 0 0)))) "Pcontact")
+
+(sdegeo:define-contact-set "Ncontact" 4  (color:rgb 0 1 0 ) "##" )
+(sdegeo:set-current-contact-set "Ncontact")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 5 10 0)))) "Ncontact")
+
+
+;; Defines the doping profiles
+
+(sdedr:define-constant-profile "substrate" "PhosphorusActiveConcentration" @ND@)
+(sdedr:define-constant-profile-material "substrate" "substrate" "Silicon")
+
+(sdedr:define-gaussian-profile "Ptop_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" 5e19 "ValueAtDepth" 1e15 "Depth" 1 "Gauss" "Factor" 0.5)
+(sdedr:define-refinement-window "Ptop_refwin" "Line"  (position 0 0 0)  (position 10 0 0) )
+(sdedr:define-analytical-profile-placement "Ptop_plac" "Ptop_prof" "Ptop_refwin" "Positive" "NoReplace" "Eval")
+
+
+;; Defines the mesh discretization rules
+
+(sdedr:define-refinement-size "default" 2 0.1 0 1 0.02 0)
+(sdedr:define-refinement-region "default" "default" "substrate" )
+(sdedr:define-refinement-function "default" "DopingConcentration" "MaxTransDiff" 1)
+
+
+; saves the model file and the mesh file 
+
+(sde:save-model "p@node@")
+(sde:build-mesh "snmesh" "-a -c boxmethod" "n@node@")

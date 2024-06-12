@@ -1,0 +1,37 @@
+;;
+;; Example 1.1: silicon resistance
+;;
+
+
+;; Define geometry
+(sdegeo:create-rectangle (position 0 0 0 )  (position 100 100 0 ) "Silicon" "substrate" )
+
+
+;; Defines contact names and placements
+
+(sdegeo:define-contact-set "C1" 4  (color:rgb 1 0 0 ) "##" )
+(sdegeo:set-current-contact-set "C1")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 1 0 0)))) "C1")
+
+(sdegeo:define-contact-set "C2" 4  (color:rgb 0 1 0 ) "##" )
+(sdegeo:set-current-contact-set "C2")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 1 100 0)))) "C2")
+
+
+;; Defines the doping profiles
+
+(sdedr:define-constant-profile "Substrate_prof_def" "BoronActiveConcentration" 1e15) 
+(sdedr:define-constant-profile-region "Substrate_prof_plac" "Substrate_prof_def" "substrate")
+
+
+;; Defines the mesh discretization rules
+
+(sdedr:define-refeval-window "Global_ref_win" "Rectangle"  (position 0 0 0) (position 100 100 0))
+(sdedr:define-refinement-size "Global_ref_def" 5 2 0 5 2 0 )
+(sdedr:define-refinement-placement "Global_ref_plac" "Global_ref_def" "Global_ref_win" )
+
+
+; saves the model file and the mesh file 
+
+(sde:save-model "p@node@")
+(sde:build-mesh "snmesh" "-a -c boxmethod" "n@node@")

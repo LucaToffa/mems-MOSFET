@@ -1,0 +1,45 @@
+;;
+;; Example 3.1: silicon Schottky diode
+;;
+
+
+;; Define geometry
+(sdegeo:create-rectangle (position 0 0 0 )  (position 20 10 0 ) "Silicon" "substrate" )
+(sdegeo:insert-vertex (position 5 0 0))
+(sdegeo:insert-vertex (position 15 0 0))
+
+;; Defines contact names and placements
+
+(sdegeo:define-contact-set "Scontact" 4  (color:rgb 1 0 0 ) "##" )
+(sdegeo:set-current-contact-set "Scontact")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 10 0 0)))) "Scontact")
+
+(sdegeo:define-contact-set "Ncontact" 4  (color:rgb 0 1 0 ) "##" )
+(sdegeo:set-current-contact-set "Ncontact")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 10 10 0)))) "Ncontact")
+
+
+;; Defines the doping profiles
+
+(sdedr:define-constant-profile "substrate" "PhosphorusActiveConcentration" 5e15)
+(sdedr:define-constant-profile-material "substrate" "substrate" "Silicon")
+
+(sdedr:define-refeval-window "Highdop_ref_win" "Rectangle"  (position 0 3 0) (position 20 10 0))
+(sdedr:define-constant-profile "Highdop_prof_def" "PhosphorusActiveConcentration" 1e19) 
+(sdedr:define-constant-profile-placement "Highdop_prof_plac" "Highdop_prof_def" "Highdop_ref_win")
+
+;; Defines the mesh discretization rules
+
+(sdedr:define-refinement-size "default" 1 1 0 0.02 0.02 0)
+(sdedr:define-refinement-region "default" "default" "substrate" )
+(sdedr:define-refinement-function "default" "DopingConcentration" "MaxTransDiff" 1)
+
+(sdedr:define-refeval-window "Surf_ref_win" "Rectangle"  (position 0 0 0) (position 20 3 0))
+(sdedr:define-refinement-size "Surf_ref_def" 0.5 0.1 0 0.02 0.02 0 )
+(sdedr:define-refinement-placement "Surf_ref_plac" "Surf_ref_def" "Surf_ref_win" )
+
+
+; saves the model file and the mesh file 
+
+(sde:save-model "p@node@")
+(sde:build-mesh "snmesh" "-a -c boxmethod" "n@node@")

@@ -1,0 +1,81 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 4.1: photodiode
+#  Transient simulation with illumination
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+	Derivatives
+	Iterations=30
+	Digits = 6
+}
+
+
+Electrode {
+	{ Name="Ncontact" Voltage=@Vbias@}
+	{ Name="Pcontact" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+	current = "@plot@" 
+	plot    = "@tdrdat@"
+}
+
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) Auger)
+  	Optics (
+		ComplexRefractiveIndex(WavelengthDep(Real Imag))
+		OpticalGeneration (
+			ComputeFromMonochromaticSource
+			TimeDependence (
+				WaveTime = (1e-9, 5E-9)
+				WaveTSigma = 1e-10
+			)
+		)
+		Excitation (
+			Wavelength = 0.65  # um
+			Intensity = 10  # W/cm2 
+			Window (	Line (X1= 5  X2= 15) ) 
+			Theta = 0
+		) 
+		OpticalSolver ( TMM ( LayerStackExtraction() ) )
+	) 
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+	OpticalGeneration
+}
+
+
+Solve {
+	Poisson
+	#Coupled{ Poisson Electron Hole }
+	newcurrentprefix = "tran_"
+	Transient(
+		InitialTime=0.0
+		FinalTime=10e-9
+		InitialStep=0.1e-9
+		MaxStep=0.1e-9
+		MinStep=1e-15
+		Increment=1.5 
+		Plot { Range = (0 10e-9) Intervals =10}
+	)
+	{ Coupled { Poisson Electron Hole} }
+}
+
+

@@ -1,0 +1,55 @@
+#----------------------------------------------------------------
+#
+#  Electronic Materials And Technologies
+#  Example 1.5: optical generation
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="C1" Voltage=0 }
+	{ Name="C2" Voltage=0 }
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ))
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	eLifetime hLifetime SRH
+	Doping 
+}
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+
+        Quasistationary(
+        		InitialStep=0.1	MinStep=1e-6 MaxStep=0.1
+           		Goal{ Name="C1" Voltage=0.1 }
+	) { Coupled { Poisson Electron Hole} }
+        Save(FilePrefix="bias01V")
+}
+

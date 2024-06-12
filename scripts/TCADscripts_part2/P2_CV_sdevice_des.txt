@@ -1,0 +1,80 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  p-n junction: mixed mode simulation
+#  Capacitance - Voltage curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+        Derivatives
+	Iterations=30
+        Digits = 8
+}
+
+
+Device DIODE {
+
+
+Electrode {
+	{ Name="Ncontact" Voltage=0}
+	{ Name="Pcontact" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+     	current = "@plot@" 
+     	plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) )
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+
+} # device	
+
+
+
+File {
+	Output = "@log@"
+	ACExtract = "@acplot@"
+}
+
+System {
+ 	DIODE d (Ncontact Pcontact)
+  	Vsource_pset  vn (Ncontact  0) {dc=0}
+ 	Vsource_pset  vp (Pcontact  0) {dc=0}
+}
+
+
+
+Solve {
+	Poisson
+	Coupled{ Poisson Electron Hole }
+   	Quasistationary (
+		InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
+		Goal { Parameter=vn.dc Voltage=10 }
+	    ) { ACCoupled (
+		StartFrequency=10e3 EndFrequency=10e3
+		NumberOfPoints=1 Decade
+		Node(Ncontact Pcontact) Exclude(vn vp)
+	) { Poisson Electron Hole }
+	}
+	
+}
+
