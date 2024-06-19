@@ -1,0 +1,82 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  Example 5.1: MOSFET: drain voltage sweep
+#  IV curves
+#
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+    Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="source" Voltage=0}
+	{ Name="drain" Voltage=0}
+	{ Name="gate" Voltage=0 Workfunction = 4.10}
+	{ Name="sub" Voltage=0}
+}
+
+
+File 	{
+	grid    = "@tdr@"
+    current = "@plot@" 
+    plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) )
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+# Biasing the MOSFET with VD = VS = VB = 0, perform an AC simulation at 1MHz,
+# sweeping the gate voltage between -3V and 3V to extract the gate capacitance
+
+Solve {
+    Poisson
+    Coupled {Poisson Electron Hole}
+    
+    # Ramp the gate voltage and perform AC analysis
+
+    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5        
+        Goal {Name="gate" Voltage=3}
+    ) { ACCoupled {
+		StartFrequency=1e6 EndFrequency=1e6
+		NumberOfPoints=1 Decade
+
+	} {Poisson Electron Hole}}
+}
+    
+ Solve3.1 {
+    Poisson
+    Coupled {Poisson Electron Hole}
+    
+    # Ramp the gate voltage and perform AC analysis
+
+    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5        
+        Goal {Name="gate" Voltage=-3}
+    ) { ACCoupled {
+		StartFrequency=1e6 EndFrequency=1e6
+		NumberOfPoints=1 Decade
+
+	} {Poisson Electron Hole}}
+}
+
+
+
+
+
