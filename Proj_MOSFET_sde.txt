@@ -25,7 +25,7 @@
 
 (sdegeo:define-contact-set "sub" 4  (color:rgb 0 1 0 ) "##" )
 (sdegeo:set-current-contact-set "sub")
-(sdegeo:set-contact-edges (list (car (find-edge-id (position 0 1.5 0)))) "sub")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 0.2 3 0)))) "sub")
 
 ;; Defines the doping profiles
 
@@ -37,9 +37,9 @@
 (sdedr:define-constant-profile-material "epitaxial" "epitaxial" "Silicon")
 
 ;;donors are N-type
-(sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 1e19 "Depth" 0.3 "Gauss" "Factor" 0.5)
+(sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.5)
 
-(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" @Npeak@ "ValueAtDepth" 1e19 "Depth" 0.3 "Gauss" "Factor" 0.5)
+(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" 2e17 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.5)
 
 (sdedr:define-refinement-window "Nsource_refwin" "Line"  (position 1 0 0)  (position 1.5 0 0) )
 (sdedr:define-analytical-profile-placement "Nsource_plac" "Nplus_prof" "Nsource_refwin" "Positive" "NoReplace" "Eval")
@@ -53,16 +53,16 @@
 
 ;; Defines the mesh discretization rules
 
-(sdedr:define-refinement-size "default" 0.1 0.1 0 0.01 0.01 0)
+(sdedr:define-refinement-size "default" 1 1 0 0.1 0.1 0)
 (sdedr:define-refinement-region "default" "default" "substrate" )
 (sdedr:define-refinement-function "default" "DopingConcentration" "MaxTransDiff" 1)
 
 (sdedr:define-refeval-window "Surf_ref_win" "Rectangle"  (position 0 0 0) (position 1.5 0.3 0))
-(sdedr:define-refinement-size "Surf_ref_def" 0.1 0.02 0 0.005 0.005 0 )
+(sdedr:define-refinement-size "Surf_ref_def" 1 0.2 0 0.05 0.05 0 )
 (sdedr:define-refinement-placement "Surf_ref_plac" "Surf_ref_def" "Surf_ref_win" )
 
 (sdedr:define-refeval-window "Gate_ref_win" "Rectangle"  (position 0.2 0 0) (position 1.3 0.005 0))
-(sdedr:define-refinement-size "Gate_ref_def" 0.05 0.0002 0 0.005 0.0001 0 )
+(sdedr:define-refinement-size "Gate_ref_def" 0.5 0.002 0 0.05 0.001 0 )
 (sdedr:define-refinement-placement "Gate_ref_plac" "Gate_ref_def" "Gate_ref_win" )
 
 ; saves the model file and the mesh file 
