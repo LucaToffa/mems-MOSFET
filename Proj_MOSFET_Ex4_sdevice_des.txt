@@ -13,6 +13,7 @@ Math 	{
 	Iterations=30
 }
 
+Device MOS {
 
 Electrode {
 	{ Name="source" Voltage=0}
@@ -43,6 +44,21 @@ Plot	{
 	Doping 
 }
 
+} # Devices
+
+File {
+	Output = "@log@"
+	ACExtract = "@acplot@"
+}
+
+System {
+ 	MOS d (drain source gate sub)
+  	Vsource_pset  vd (drain  0) {dc=0}
+ 	Vsource_pset  vs (source  0) {dc=0}
+	Vsource_pset  vg (gate  0) {dc=0}
+ 	Vsource_pset  vb (sub  0) {dc=0}
+}
+
 # Biasing the MOSFET with VD = VS = VB = 0, perform an AC simulation at 1MHz,
 # sweeping the gate voltage between -3V and 3V to extract the gate capacitance
 
@@ -52,28 +68,34 @@ Solve {
     
     # Ramp the gate voltage and perform AC analysis
 
-    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5        
-        Goal {Name="gate" Voltage=3}
-    ) { ACCoupled {
+    Quasistationary (
+		InitialStep=0.02 MaxStep=0.02 MinStep=1e-5        
+        Goal {Parameter=vg.dc Voltage=3}
+    ) { ACCoupled (
 		StartFrequency=1e6 EndFrequency=1e6
 		NumberOfPoints=1 Decade
+		Node(drain source gate sub) Exclude(vd vs vg vb)
+	)
 
-	} {Poisson Electron Hole}}
+	 {Poisson Electron Hole}}
 }
     
- Solve1 {
+Solve {
     Poisson
     Coupled {Poisson Electron Hole}
     
     # Ramp the gate voltage and perform AC analysis
 
-    Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5        
-        Goal {Name="gate" Voltage=-3}
-    ) { ACCoupled {
+    Quasistationary (
+		InitialStep=0.02 MaxStep=0.02 MinStep=1e-5        
+        Goal {Parameter=vg.dc Voltage=-3}
+    ) { ACCoupled (
 		StartFrequency=1e6 EndFrequency=1e6
 		NumberOfPoints=1 Decade
+		Node(drain source gate sub) Exclude(vd vs vg vb)
+	)
 
-	} {Poisson Electron Hole}}
+	 {Poisson Electron Hole}}
 }
 
 

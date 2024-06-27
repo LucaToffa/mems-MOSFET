@@ -75,9 +75,3 @@ Solve {
 		Goal {Name="drain" Voltage=3.3})
 	{Coupled {Poisson Electron Hole}}
 }
-
-
-
-
-
-

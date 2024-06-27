@@ -5,19 +5,21 @@
 
 ;; Define geometry
 
-(sdegeo:create-rectangle (position 0.2 0 0 )  (position 1.3 -0.01 0 ) "PolySi" "oxide" )
-(sdegeo:create-rectangle (position 0 0 0 )  (position 1.5 2 0 ) "Silicon" "epitaxial" )
-(sdegeo:create-rectangle (position 0 2 0 )  (position 1.5 3 0 ) "Silicon" "substrate" )
+(sdegeo:create-rectangle (position 0.2 0 0 )  (position 1.3 -0.01 0 ) "SiO2" "oxide" )
+;;(sdegeo:create-rectangle (position 0 0 0 )  (position 1.5 2 0 ) "Silicon" "epitaxial" )
+(sdegeo:create-rectangle (position 0 0 0 )  (position 1.5 3 0 ) "Silicon" "substrate" )
 
+(sdegeo:insert-vertex (position 0.5 -0.01 0))
+(sdegeo:insert-vertex (position 1 -0.01 0))
 ;; Defines contact names and placements
 
 (sdegeo:define-contact-set "source" 4  (color:rgb 1 0 0 ) "##" )
 (sdegeo:set-current-contact-set "source")
-(sdegeo:set-contact-edges (list (car (find-edge-id (position 1.3 0 0)))) "source")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 1.4 0 0)))) "source")
 
 (sdegeo:define-contact-set "drain" 4  (color:rgb 0 1 0 ) "##" )
 (sdegeo:set-current-contact-set "drain")
-(sdegeo:set-contact-edges (list (car (find-edge-id (position 0.2 0 0)))) "drain")
+(sdegeo:set-contact-edges (list (car (find-edge-id (position 0.1 0 0)))) "drain")
 
 (sdegeo:define-contact-set "gate" 4  (color:rgb 0 1 0 ) "##" )
 (sdegeo:set-current-contact-set "gate")
@@ -29,18 +31,17 @@
 
 ;; Defines the doping profiles
 
-(sdedr:define-constant-profile "substrate" "BoronActiveConcentration" 1e19)
+(sdedr:define-constant-profile "substrate" "BoronActiveConcentration" 2e17)
 (sdedr:define-constant-profile-material "substrate" "substrate" "Silicon")
 
 ;;epitaxial layer
-(sdedr:define-constant-profile "epitaxial" "BoronActiveConcentration" 2e17)
-(sdedr:define-constant-profile-material "epitaxial" "epitaxial" "Silicon")
+;;(sdedr:define-constant-profile "epitaxial" "BoronActiveConcentration" 2e17)
+;;(sdedr:define-constant-profile-material "epitaxial" "epitaxial" "Silicon")
 
 ;;donors are N-type
-(sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.5)
+(sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.1)
 
-;;(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" 2e17 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.5)
-(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" CP "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.5)
+(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" 0  "PeakVal" 5e17 "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.1)
 
 (sdedr:define-refinement-window "Nsource_refwin" "Line"  (position 1 0 0)  (position 1.5 0 0) )
 (sdedr:define-analytical-profile-placement "Nsource_plac" "Nplus_prof" "Nsource_refwin" "Positive" "NoReplace" "Eval")
@@ -48,26 +49,27 @@
 (sdedr:define-refinement-window "Ndrain_refwin" "Line"  (position 0 0 0)  (position 0.5 0 0) )
 (sdedr:define-analytical-profile-placement "Ndrain_plac" "Nplus_prof" "Ndrain_refwin" "Positive" "NoReplace" "Eval")
 
-;(sdedr:define-refinement-window "Pch_refwin" "Line"  (position 0.2 0 0)  (position 1.3 0 0) )
-;(sdedr:define-analytical-profile-placement "Pch_plac" "Pch_prof" "Pch_refwin" "Positive" "NoReplace" "Eval")
-(sdedr:define-refinement-window "Pch_refwin" "Rectangle" (position 0.2 0 0) (position 1.3 0 0))
+(sdedr:define-refeval-window "N_ref_win" "Rectangle"  (position 2 0 0)  (position 1.5 3 0) )
+(sdedr:define-constant-profile "N_prof_def" "BoronActiveConcentration" 1e19)
+(sdedr:define-constant-profile-placement "N_prof_place" "N_prof_def" "N_ref_win")
+
+(sdedr:define-refinement-window "Pch_refwin" "Line"  (position 0.5 0 0)  (position 1 0 0) )
 (sdedr:define-analytical-profile-placement "Pch_plac" "Pch_prof" "Pch_refwin" "Positive" "NoReplace" "Eval")
 
 
 ;; Defines the mesh discretization rules
 
-(sdedr:define-refinement-size "default" 1 1 0 0.1 0.1 0)
+(sdedr:define-refinement-size "default" 0.1 0.1 0 0.01 0.02 0)
 (sdedr:define-refinement-region "default" "default" "substrate" )
 (sdedr:define-refinement-function "default" "DopingConcentration" "MaxTransDiff" 1)
 
 (sdedr:define-refeval-window "Surf_ref_win" "Rectangle"  (position 0 0 0) (position 1.5 0.3 0))
-(sdedr:define-refinement-size "Surf_ref_def" 1 0.2 0 0.05 0.05 0 )
+(sdedr:define-refinement-size "Surf_ref_def" 0.02 0.02 0 0.01 0.01 0 )
 (sdedr:define-refinement-placement "Surf_ref_plac" "Surf_ref_def" "Surf_ref_win" )
 
 (sdedr:define-refeval-window "Gate_ref_win" "Rectangle"  (position 0.2 0 0) (position 1.3 0.005 0))
-(sdedr:define-refinement-size "Gate_ref_def" 0.5 0.002 0 0.05 0.001 0 )
+(sdedr:define-refinement-size "Gate_ref_def" 0.02 0.002 0 0.01 0.001 0 )
 (sdedr:define-refinement-placement "Gate_ref_plac" "Gate_ref_def" "Gate_ref_win" )
-
 
 ; saves the model file and the mesh file 
 
