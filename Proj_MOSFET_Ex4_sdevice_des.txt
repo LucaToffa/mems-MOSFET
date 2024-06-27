@@ -61,7 +61,7 @@ Solve {
 	} {Poisson Electron Hole}}
 }
     
- Solve3.1 {
+ Solve1 {
     Poisson
     Coupled {Poisson Electron Hole}
     
