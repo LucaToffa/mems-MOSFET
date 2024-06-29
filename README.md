@@ -2,8 +2,7 @@
 
 Characterization of a mosfet / Analysis of some of its properties
 
-n+ poly si is 3.95
-in sde1, peak val 5e17 to variable to find Vt = 0.8
+### Problem Statement
 
 Create a MOSFET with the structure shown in Figure 1, using the following parameters:
 WDEV, device width: 1.5μm
@@ -35,3 +34,15 @@ Write a short report including the following items:
 - **Potential profile in equilibrium**
 - **Simulated transfer and output characteristics**
 - **Simulated Capacitance-Voltage curves**
+
+
+### Working pointers
+n+ poly si workfunction is 3.95
+in sde1, peak val 5e17 to variable to find Vt = 0.8
+
+
+### Using Typst for the report
+- code extensions: Typst LSP, Typst Preview, vscode-pdf
+- references: 
+        https://typst.app/docs/tutorial/writing-in-typst/
+        
