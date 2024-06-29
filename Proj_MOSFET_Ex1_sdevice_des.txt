@@ -17,7 +17,7 @@ Math 	{
 Electrode {
 	{ Name="source" Voltage=0}
 	{ Name="drain" Voltage=0}
-	{ Name="gate" Voltage=0 Workfunction = 4.10}
+	{ Name="gate" Voltage=0 Workfunction = 3.95}
 	{ Name="sub" Voltage=0}
 }
 
