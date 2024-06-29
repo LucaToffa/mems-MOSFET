@@ -9,7 +9,7 @@
 
 Math 	{
 	Extrapolate
-    Derivatives
+        Derivatives
 	Iterations=30
 }
 
@@ -17,15 +17,15 @@ Math 	{
 Electrode {
 	{ Name="source" Voltage=0}
 	{ Name="drain" Voltage=0}
-	{ Name="gate" Voltage=0 Workfunction = 4.10}
+	{ Name="gate" Voltage=0 Workfunction = 3.95}
 	{ Name="sub" Voltage=0}
 }
 
 
 File 	{
 	grid    = "@tdr@"
-    current = "@plot@" 
-    plot    = "@tdrdat@"
+        current = "@plot@" 
+        plot    = "@tdrdat@"
 }
 
 		
@@ -68,7 +68,7 @@ Solve {
 		Goal {Name="drain" Voltage=3.3})
 	{Coupled {Poisson Electron Hole}}
 
-	# Second curve
+    # Second curve
 	Load(FilePrefix="VGS3")
 	NewCurrentPrefix="CurveVGS3_"
 	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
