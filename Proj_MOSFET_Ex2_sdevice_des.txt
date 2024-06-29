@@ -15,17 +15,17 @@ Math 	{
 
 
 Electrode {
-	{ Name="source" Voltage=0}
+        { Name="source" Voltage=0}
 	{ Name="drain" Voltage=0}
-	{ Name="gate" Voltage=0 Workfunction = 4.10}
+	{ Name="gate" Voltage=0 Workfunction = 3.95}
 	{ Name="sub" Voltage=0}
 }
 
 
 File 	{
-    grid    = "@tdr@"
-    current = "@plot@" 
-    plot    = "@tdrdat@"
+        grid    = "@tdr@"
+        current = "@plot@" 
+        plot    = "@tdrdat@"
 }
 
 		
@@ -76,8 +76,8 @@ Solve {
 		Goal {Name="drain" Voltage=5})
 	{Coupled {Poisson Electron Hole}}
 
-    # from part 2
-    # Ramp the drain voltage
+        # from part 2
+        # Ramp the drain voltage
 	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
 		Goal {Name="drain" Voltage=5}
 	) {Coupled {Poisson Electron Hole}}
