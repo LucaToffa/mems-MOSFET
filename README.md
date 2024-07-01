@@ -42,7 +42,8 @@ in sde1, peak val 5e17 to variable to find Vt = 0.8
 
 
 ### Using Typst for the report
-- code extensions: Typst LSP, Typst Preview, vscode-pdf
+- code extensions: Typst LSP, Typst Preview, vscode-pdf ( **ctrl k** then **v** to open pdf preview)
 - references: 
+    
         https://typst.app/docs/tutorial/writing-in-typst/
         

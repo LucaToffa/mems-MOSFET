@@ -22,6 +22,21 @@
   *#title*
 ])
 
+// Renders an image or a placeholder if it doesn't exist.
+// Don’t try this at home, kids!
+#let maybe-image(path, ..args) = locate(loc => {
+  let path-label = label(path)
+  let first-time = query(locate(_ => {}).func(), loc).len() == 0
+  if first-time or query(path-label, loc).len() > 0 {
+    [#image(path, ..args)#path-label]
+  } else {
+    rect(width: 50%, height: 5em, fill: luma(235), stroke: 1pt)[
+      #set align(center + horizon)
+      Could not find #raw(path)
+    ]
+  }
+})
+
 === Introduction
 [Provide an introduction to the topic and the purpose of the report.]
 
@@ -29,7 +44,7 @@
 Here is shown the device this sreport is about @mosfet.
 
 #figure(
-  image("mosfet_structure.png", width: 50%),
+  maybe-image("mosfet_structure.png", width: 50%),
   caption: [
     _MOSFET_ to be characterized.
   ],
@@ -39,7 +54,7 @@ Here is shown the device this sreport is about @mosfet.
 The final device mesh is shown in @mesh.
 
 #figure(
-  image("device_mesh.png", width: 50%),
+  maybe-image("device_mesh.png", width: 50%),
   caption: [
     Final device mesh.
   ],
@@ -47,9 +62,8 @@ The final device mesh is shown in @mesh.
 
 == Potential profile in equilibrium
 The potential profile in equilibrium is shown in @potential.
-
 #figure(
-  image("potential_profile.png", width: 50%),
+  maybe-image("potential_profile.png", width: 50%),
   caption: [
     Potential profile in equilibrium.
   ],
@@ -64,14 +78,14 @@ The output characteristics show the drain current saturation at high drain volta
 */
 
 #figure(
-  image("transfer_characteristics.png", width: 50%),
+  maybe-image("transfer_characteristics.png", width: 50%),
   caption: [
     Transfer characteristics.
   ],
 ) <transfer>
 
 #figure(
-  image("output_characteristics.png", width: 50%),
+  maybe-image("output_characteristics.png", width: 50%),
   caption: [
     Output characteristics.
   ],
@@ -81,7 +95,7 @@ The output characteristics show the drain current saturation at high drain volta
 The simulated Capacitance-Voltage curves are shown in the following images.
 
 #figure(
-  image("capacitance_voltage_curves.png", width: 50%),
+  maybe-image("capacitance_voltage_curves.png", width: 50%),
   caption: [
     Capacitance-Voltage curves.
   ],
@@ -99,4 +113,3 @@ The simulated Capacitance-Voltage curves are shown in the following images.
 
 === Appendix
 [Include any additional information or data that supports the report.]
-
