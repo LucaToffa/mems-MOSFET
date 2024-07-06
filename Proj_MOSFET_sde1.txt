@@ -1,5 +1,7 @@
 ;;
-;; Example 5.1: silicon MOSFET
+;; New Silicon MOSFET Structure 
+;; Add a shallow boron gaussian doping profile under the gate to adjust the threshold to 0.8V. 
+;; Consider for the profile a peak concentration CP at the interface between silicon and oxide and a doping concentration of 2x1017 cm-3 at 0.1 μm depth
 ;;
 
 
@@ -41,7 +43,7 @@
 ;;donors are N-type
 (sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.1)
 
-(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos" @bdoping@  "PeakVal" 5e17 "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.1)
+(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos"  0 "PeakVal" 2.3e17 "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.1)
 
 (sdedr:define-refinement-window "Nsource_refwin" "Line"  (position 1 0 0)  (position 1.5 0 0) )
 (sdedr:define-analytical-profile-placement "Nsource_plac" "Nplus_prof" "Nsource_refwin" "Positive" "NoReplace" "Eval")
