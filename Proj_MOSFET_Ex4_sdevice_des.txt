@@ -1,9 +1,7 @@
 #----------------------------------------------------------------
 #
 #  Electronics Devices, Sensors and MEMS
-#  Example 5.1: MOSFET: drain voltage sweep
-#  IV curves
-#
+#  MOSFET: Simulation in order to obtain the extracted gate capacitance 
 #----------------------------------------------------------------
 
 
@@ -44,7 +42,9 @@ Plot	{
 	Doping 
 }
 
-} # Devices
+} 
+
+# Devices
 
 File {
 	Output = "@log@"
@@ -59,8 +59,8 @@ System {
  	Vsource_pset  vb (sub  0) {dc=0}
 }
 
-# Biasing the MOSFET with VD = VS = VB = 0, perform an AC simulation at 1MHz,
-# sweeping the gate voltage between -3V and 3V to extract the gate capacitance
+# Biasing the MOSFET with VD = VS = VB = 0, perform an AC simulation at 1MHz
+# Sweeping the gate voltage between -3V and 3V to extract the gate capacitance
 
 Solve {
     Poisson
