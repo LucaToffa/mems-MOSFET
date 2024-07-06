@@ -4,22 +4,22 @@ Characterization of a mosfet / Analysis of some of its properties
 
 ### Problem Statement
 
-Create a MOSFET with the structure shown in Figure 1, using the following parameters:
-WDEV, device width: 1.5μm
-tEPI, epitaxial layer thickness, 2μm
-tSUB, substrate thickness: 1 μm
-L, gate length: 0.5μm
-LDIMP, drain implantation length: 0.5μm
-LSIMP, source implantation length: 0.5μm
-LD, drain electrode length: 0.2μm
-LS, source electrode length: 0.2μm
-Drain and source doping:
-Vertical and lateral profiles: gaussian
-Xj, drain and source junction depth: 0.3μm
-Peak donor concentration: 1018cm-3
-Epitaxial layer doping: 2x1017 cm-3
-Substrate doping: 1019 cm-3
-Gate thickness: 10nm
+Create a MOSFET with the structure shown in Figure 1, using the following parameters:\
+WDEV, device width: 1.5μm\
+tEPI, epitaxial layer thickness, 2μm\
+tSUB, substrate thickness: 1 μm\
+L, gate length: 0.5μm\
+LDIMP, drain implantation length: 0.5μm\
+LSIMP, source implantation length: 0.5μm\
+LD, drain electrode length: 0.2μm\
+LS, source electrode length: 0.2μm\
+Drain and source doping:\
+Vertical and lateral profiles: gaussian\
+Xj, drain and source junction depth: 0.3μm\
+Peak donor concentration: 1018cm-3\
+Epitaxial layer doping: 2x1017 cm-3\
+Substrate doping: 1019 cm-3\
+Gate thickness: 10nm\
 Gate material: n+ poly-Si
 
 After generating a suitable mesh, perform the following simulations:
@@ -38,6 +38,7 @@ Write a short report including the following items:
 
 ### Working pointers
 n+ poly si workfunction is 3.95
+
 in sde1, peak val 5e17 to variable to find Vt = 0.8
 
 
