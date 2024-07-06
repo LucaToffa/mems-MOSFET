@@ -47,13 +47,13 @@ Solve {
 	
 	# Ramp the drain voltage
 	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
-		Goal {Name="drain" Voltage=5}
+		Goal {Name="drain" Voltage=3.3}
 	) {Coupled {Poisson Electron Hole}}
 
 
 	# Ramp the gate voltage
 	NewCurrentPrefix="GateSweep_"
 	Quasistationary (InitialStep=0.01 Maxstep=0.01 MinStep=1e-5
-		Goal {Name="gate" Voltage=5})
+		Goal {Name="gate" Voltage=3.3})
 	{Coupled {Poisson Electron Hole}}
 }
