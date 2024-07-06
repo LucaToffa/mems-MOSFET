@@ -1,15 +1,13 @@
 #----------------------------------------------------------------
 #
 #  Electronics Devices, Sensors and MEMS
-#  Example 5.1: MOSFET: drain voltage sweep
-#  IV curves
-#
+#  MOSFET : Equilibrium State,Mesh,ElectricField,Electrostatic Potential
 #----------------------------------------------------------------
 
 
 Math 	{
 	Extrapolate
-        Derivatives
+    Derivatives
 	Iterations=30
 }
 
@@ -46,4 +44,9 @@ Plot	{
 Solve {
 	Poisson
 	Coupled{ Poisson Electron Hole }
+	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5
+		Goal {Name="gate" Voltage=0}
+		Plot { Range = (0 4) Intervals =1}
+	) {Coupled {Poisson Electron Hole}}
+	Save(FilePrefix="equil")
 }
