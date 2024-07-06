@@ -1,5 +1,5 @@
 ;;
-;; Example 5.1: silicon MOSFET
+;; Silicon MOSFET Structure
 ;;
 
 
