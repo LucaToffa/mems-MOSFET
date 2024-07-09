@@ -39,12 +39,9 @@ Write a short report including the following items:
 ### Working pointers
 n+ poly si workfunction is 3.95
 
-in sde1, peak val 5e17 to variable to find Vt = 0.8
+in sde1, peak val 2.3e17 to variable to find Vt = 0.8
 
 
-### Using Typst for the report
-- code extensions: Typst LSP, Typst Preview, vscode-pdf ( **ctrl k** then **v** to open pdf preview)
-- references: 
-    
-        https://typst.app/docs/tutorial/writing-in-typst/
+### Using LaTex for the report
+Link al Report: https://it.overleaf.com/read/qyznjykyqmmz#4b9f6b
         
