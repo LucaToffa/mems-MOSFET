@@ -48,7 +48,7 @@ Solve {
 	# Ramp the gate and save structures
 	# First gate voltage
 	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
-		Goal {Name="gate" Voltage=2}
+		Goal {Name="gate" Voltage=1.2}
 		Plot { Range = (0 1) Intervals =2}
 	) {Coupled {Poisson Electron Hole}}
 	Save(FilePrefix="vg1")
@@ -73,7 +73,9 @@ Solve {
 	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
 		Goal {Name="drain" Voltage=3.3})
 	{Coupled {Poisson Electron Hole}}
-    
+}
+
+
     # Transfer characteristic with VGS = 1.2V 
     Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5
         Goal {Name="gate" Voltage=1.2}
@@ -102,4 +104,4 @@ Solve {
 	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
 		Goal {Name="drain" Voltage=3.3})
 	{Coupled {Poisson Electron Hole}}
-}
+

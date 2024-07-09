@@ -1,0 +1,57 @@
+#----------------------------------------------------------------
+#
+#  Electronics Devices, Sensors and MEMS
+#  MOSFET : output characteristic with VGS = 1.2V and VGS = 3V
+#----------------------------------------------------------------
+
+
+Math 	{
+	Extrapolate
+    Derivatives
+	Iterations=30
+}
+
+
+Electrode {
+	{ Name="source" Voltage=0}
+	{ Name="drain" Voltage=3.3}
+	{ Name="gate" Voltage=0 Workfunction = 3.95}
+	{ Name="sub" Voltage=0}
+}
+
+
+File 	{
+	    grid    = "@tdr@"
+        current = "@plot@" 
+        plot    = "@tdrdat@"
+}
+
+		
+Physics{
+	Temperature = 300	
+	Recombination(SRH( DopingDep ) )
+}
+		
+		
+Plot	{
+	eDensity hDensity
+	TotalCurrent/Vector eCurrent/Vector hCurrent/Vector
+	ElectricField/Vector Potential
+	SpaceCharge
+	Doping 
+}
+
+Solve {
+    Poisson
+    Coupled {Poisson Electron Hole}
+
+	# Ramp the gate and save structures
+	# First gate voltage
+	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
+		Goal {Name="gate" Voltage=3.3}
+		Plot { Range = (0 1) Intervals =2}
+	) {Coupled {Poisson Electron Hole}}
+	Save(FilePrefix="vg1")
+
+
+}
