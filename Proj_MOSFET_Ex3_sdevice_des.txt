@@ -45,37 +45,6 @@ Solve {
     Poisson
     Coupled {Poisson Electron Hole}
 
-	# Ramp the gate and save structures
-	# First gate voltage
-	Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5		
-		Goal {Name="gate" Voltage=1.2}
-		Plot { Range = (0 1) Intervals =2}
-	) {Coupled {Poisson Electron Hole}}
-	Save(FilePrefix="vg1")
-
-	# Second gate voltage
-	Quasistationary (InitialStep=0.1 Maxstep=0.1 MinStep=1e-5
-		Goal {Name="gate" Voltage=3})
-	{Coupled {Poisson Electron Hole}}
-	Save(FilePrefix="vg2")
-
-	# Load the saved structures and ramp the drain
-	# First curve
-	Load(FilePrefix="vg1")
-	NewCurrentPrefix="Curve1_"
-	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
-		Goal {Name="drain" Voltage=3.3})
-	{Coupled {Poisson Electron Hole}}
-
-	# Second curve
-	Load(FilePrefix="vg2")
-	NewCurrentPrefix="Curve2_"
-	Quasistationary (InitialStep=0.01 MaxStep=0.01 MinStep=1e-5
-		Goal {Name="drain" Voltage=3.3})
-	{Coupled {Poisson Electron Hole}}
-}
-
-
     # Transfer characteristic with VGS = 1.2V 
     Quasistationary (InitialStep=0.1 MaxStep=0.1 MinStep=1e-5
         Goal {Name="gate" Voltage=1.2}
