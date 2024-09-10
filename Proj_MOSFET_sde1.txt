@@ -39,7 +39,7 @@
 ;;donors are N-type
 (sdedr:define-gaussian-profile "Nplus_prof" "PhosphorusActiveConcentration" "PeakPos" 0  "PeakVal" 1e18 "ValueAtDepth" 2e17 "Depth" 0.3 "Gauss" "Factor" 0.1)
 
-(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos"  0 "PeakVal" 2.3e17 "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.1)
+(sdedr:define-gaussian-profile "Pch_prof" "BoronActiveConcentration" "PeakPos"  0 "PeakVal" 4.3e17 "ValueAtDepth" 2e17 "Depth" 0.1 "Gauss" "Factor" 0.1)
 
 (sdedr:define-refinement-window "Nsource_refwin" "Line"  (position 1 0 0)  (position 1.5 0 0) )
 (sdedr:define-analytical-profile-placement "Nsource_plac" "Nplus_prof" "Nsource_refwin" "Positive" "NoReplace" "Eval")
